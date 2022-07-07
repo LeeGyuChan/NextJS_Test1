@@ -1,0 +1,1 @@
+export const REACT_APP_API_HOST = "https://pokeapi.co/api/v2";
