@@ -1,7 +1,10 @@
 import styled from "@emotion/styled"
+import { AxiosError, AxiosResponse } from "axios";
 import { dehydrate, QueryClient } from "react-query";
 import { pokemon2Api, pokemonApi } from "../../src/apis/pokemonApi";
 import PokemonList from "../../src/components/PokemonList";
+import { usePokemonPage } from "../../src/hooks/usePokemon";
+import { ListResponse } from "../../src/types/pokemon";
 
 const Base = styled.div`
   position: absolute;
@@ -64,29 +67,43 @@ const getPokemons = async () => {
     data : data
   }
 
-  return obj;
+  const obj2 = {
+    pages : [{
+      data : data
+    }]
+  }
+  
+  return obj2;
 };
+
+
+const getPokemons2 = async () => {
+  const data =  ({pageParam = 150})=>  pokemon2Api('', pageParam);
+
+  console.log({data});
+
+  return data;
+};
+
 
 
 export async function getServerSideProps() {
 
   const queryClient = new QueryClient();
 
-  
+
   await queryClient.prefetchQuery('pokemons', getPokemons)
   
+//  await queryClient.prefetchInfiniteQuery<AxiosResponse<ListResponse, AxiosError>>('pokemons' , ()=>  pokemon2Api('', 150), {staleTime: 1000})
+
   // await queryClient.prefetchInfiniteQuery(
-  //     'pokemons' , ({pageParam = 150})=>  pokemon2Api('', pageParam),
+  //     'pokemons' , ()=>  pokemon2Api('', 150),
   //         {
-  //             getNextPageParam : (lastPage, allPage) => {
-                
-  //                 return 300;
-  //             },
+  //           getPreviousPageParam: undefined,
+  //           getNextPageParam: undefined,
+  //             staleTime : 1000
   //         },
   //     );
-      
-          
-          
   console.log('getServerSideProps');
 
   return {
