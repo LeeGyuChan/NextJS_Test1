@@ -104,7 +104,6 @@ export async function getServerSideProps() {
   //             staleTime : 1000
   //         },
   //     );
-  console.log('getServerSideProps');
 
   return {
     props: {
